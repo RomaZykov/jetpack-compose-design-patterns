@@ -12,8 +12,10 @@ Project maintained by [@Cavin](https://www.github.com/in/cavin-macwan/)
     - [Factory Method](#factory-method)
     - [Abstract Factory](#abstract-factory)
     - [Singleton](#singleton)
-    - [Builder](#builder)
     - [Prototype](#prototype)
+
+
+More to come soon ⏳ (Create a PR if you wish to contribute 😄)
 
 - Structural Patterns
 
@@ -40,7 +42,8 @@ Project maintained by [@Cavin](https://www.github.com/in/cavin-macwan/)
     - [Memento](#momento)
 
 - <h2 align="left"><a id="factory-method">Factory Method (Creational Patterns)</h2>
-  A factory design pattern is a generative design pattern that helps to abstract how an object is created. This makes your code more flexible and extensible.
+  
+A factory design pattern is a generative design pattern that helps to abstract how an object is created. This makes your code more flexible and extensible.
 
 The basic idea of the factory design pattern is to delegate object creation to a factory class. This factory class determines which object is created.
 
@@ -66,7 +69,7 @@ Here's a real-world example of the Factory Design Pattern in Jetpack Compose, fo
 
 Scenario: You have a news app where each news item can be displayed in several formats like 'simple' (only text), 'rich' (with image), or 'interactive' (includes interactive elements like a poll).
 
-1. Define an Interface for Card Factories:
+### 1. Define an Interface for Card Factories:
 
 ```kotlin
 interface NewsCardFactory {
@@ -77,7 +80,7 @@ interface NewsCardFactory {
 data class NewsItem(val title: String, val content: String, val imageUrl: String?)
 ```
 
-2. Implement Concrete Factories for Each Card Type:
+### 2. Implement Concrete Factories for Each Card Type:
 
 - Simple Card Factory:
 
@@ -137,7 +140,7 @@ class RichCardFactory : NewsCardFactory {
 ```
 
 
-3. Create a Factory Provider:
+### 3. Create a Factory Provider:
 
 ```kotlin
 enum class CardType { SIMPLE, RICH }
@@ -161,7 +164,7 @@ private val LocalCardFactory = staticCompositionLocalOf<NewsCardFactory> {
 }
 ```
 
-4. Usage in your App:
+### 4. Usage in your App:
 
 ```kotlin
 @Composable
@@ -528,3 +531,6 @@ fun ProtoTypeView() {
 - [ ] Visitor
 - [ ] Memento
 
+![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+
+![Hey\! Thanks\!](https://media.giphy.com/media/ip6n2oVNZBHiM/giphy.gif)
