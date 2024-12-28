@@ -2,6 +2,8 @@ Project maintained by [@Cavin](https://www.github.com/in/cavin-macwan/)
 
 <a href="https://www.buymeacoffee.com/cavin.macwan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
+![jetpack compose design pattern banner](jetpack-compose-design-pattern.png)
+
 <h1 align="center"><a id="head">Design Patterns with Jetpack Compose</h1>
 
 - <h2 align="left">What are Design Patterns briefly?</h2>
