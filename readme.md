@@ -1,4 +1,4 @@
-Project maintained by [@Cavin](https://www.github.com/in/cavin-macwan/)
+Project maintained by [@Cavin](https://www.github.com/cavin-macwan/)
 
 ![jetpack compose design pattern banner](banner/jetpack-compose-design-pattern.png)
 
