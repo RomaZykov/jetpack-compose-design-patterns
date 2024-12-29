@@ -6,6 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.cavin.designpatterns.ui.theme.JetpackComposeDesignPatternsTheme
 import com.cavin.designpatterns.views.AbstractFactoryView
+import com.cavin.designpatterns.views.AdaptorView
+import com.cavin.designpatterns.views.BridgeView
+import com.cavin.designpatterns.views.CompositeView
+import com.cavin.designpatterns.views.DecoratorPatternExample
+import com.cavin.designpatterns.views.FacadeView
 import com.cavin.designpatterns.views.ProtoTypeView
 import com.cavin.designpatterns.views.SingletonView
 
@@ -15,7 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetpackComposeDesignPatternsTheme {
-                ProtoTypeView()
+                FacadeView()
             }
         }
     }
