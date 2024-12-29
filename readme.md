@@ -506,7 +506,7 @@ The Adapter pattern makes the interfaces of two different classes or interfaces 
 
 <h4 align="left">The adapter design pattern has two main components</h4>
 
-- Adapted class or interface:\*\* The purpose of the adapter pattern is to adapt this class or interface to have a different interface.
+- **Adapted class or interface:** The purpose of the adapter pattern is to adapt this class or interface to have a different interface.
 - **Adaptor class:** The adapter class is the class that adapts the adapted class or interface to have a different interface.
 - **Customer class:** A class that uses the interface of the adapter class.
 
@@ -633,10 +633,10 @@ interface VideoProcessor {
 }
 ```
 
+
 Now it is time to implement our **Video Processor** technology for the related video/videos. For this, let's assume that we support HD, UHD (4K) and QUHD (8K) video quality. For each video quality, we get **instantiation** from our **Video Processor** **abstract** class.
 
 ```kotlin
-// 2. Define concrete implementations for VideoProcessor.
 class HDProcessor : VideoProcessor {
     override fun process(videoFile: String) {
         println("$videoFile is being processed with HD quality.")
@@ -660,6 +660,7 @@ class QUHD8KProcessor : VideoProcessor {
 }
 ```
 
+
 Then we define an interface for **Video**. In it, we ensure that our **Video Processor** technology is implemented compulsorily. Then we define an empty method named **play(String videoFile)** for the video.
 
 ```kotlin
@@ -680,6 +681,8 @@ class YoutubeVideo(processor: VideoProcessor) : Video(processor) {
     }
 }
 ```
+
+
 Now let's start running our scenario for Netflix and Youtube. We create separate classes for both Netflix and Youtube and inherit from the **Video** interface.
 
 ```kotlin
@@ -699,6 +702,7 @@ class AmazonPrimeVideo(processor: VideoProcessor) : Video(processor) {
     }
 }
 ```
+
 
 So how can we use this on the UI side?
 
@@ -838,6 +842,7 @@ data class Product(
 }
 ```
 
+
 Now it is time to build a product tree collectively. In our scenario, we will consider the **Car** and **Desktop Computer** categories. Since these categories can be divided into many parts (wheels, motherboard, etc.)
 We create a class named **Category** that inherits from **CartItem** **Abstract** class to manage related structures in a common way. The **buildItemWidget()** method returns the **ExpansionPanel** and we collect other similar products in the **final List<CartItem<dynamic>> children** list under a single common category heading.
 
@@ -878,6 +883,7 @@ data class Category(
 }
 ```
 
+
 Let's see what kind of usage scenario can be on the UI side. First of all, we create a list to set the relevant category and single products. As I said before, our categories will be **Desktop Computer** and **Car**. There will be related products in the sub-products.
 
 ```kotlin
@@ -899,6 +905,7 @@ val categories = listOf(
 )
 
 ```
+
 
 We display categories and single product using **ExpansionPanelList**.
 
