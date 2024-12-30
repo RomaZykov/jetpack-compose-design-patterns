@@ -1210,6 +1210,204 @@ fun FacadeView() {
 
 [Return to the beginning of the documentation](#head)
 
+
+- <h2 align="left"><a id="flyweight">Flyweight (Structural Patterns)</h2>
+The Flyweight design pattern is a structural design pattern used to optimize memory usage. This pattern aims to reduce repetitive states by separating intrinsic states and non-shareable states (extrinsic states) between objects, thus efficiently reducing memory usage. It becomes especially important in cases where many similar objects are created. An example of using the Flyweight design pattern in Flutter would be optimizing repeating widgets, especially in widget trees. In Flutter applications, some widgets are used repeatedly, especially in list or grid views. In this case, by applying the Flyweight pattern, we can optimize memory usage and improve the performance of the application.
+
+<h4 align="left">The Flyweight design pattern has 4 main components</h4>
+
+- **Flyweight Interface:** Defines a common interface of shared objects.
+- **Concrete Flyweight:** Class that implements the Flyweight interface and stores the intrinsic state.
+- **Flyweight Factory:** Creates and manages Flyweight objects. If the same object has been created before, it allows it to be reused.
+- **Client:** Uses Flyweight objects. It provides the extrinsic state and combines it with Flyweight.
+
+<h5 align="left">Advantages of the Flyweight design pattern</h5>
+
+- Reduces memory usage by preventing similar objects from being created over and over again.
+- Performance increases because fewer objects are created.
+
+<h5 align="left"> Disadvantages of the Flyweight design pattern</h5>
+
+- Design can get complicated.
+- Management of internal and external situations may become difficult.
+
+**Sample Scenario**
+
+How about doing this in an actual application, package, etc. How can we implement it? Let's look at it. According to our scenario, we want to make a social media application. Let's imagine a list showing posts in this application. Instead of creating the same icons over and over again for actions such as comments, likes and shares on each post, we will optimize them with the **Flyweight** design pattern.
+
+First, we start by making the **Flyweight Interface** layer. We place a method with the method signature **Widget createWidget(Color color, double size)**, which returns **Widget**.
+
+```kotlin
+interface Flyweight {
+  @Composable
+  fun render(color: Color, size: Dp)
+}
+```
+
+Then it's time for the **Concrete Flyweight** layer. We will store the **intrinsic state** in this layer. In our case, this will be an icon. At the same time, we **@override** the **createWidget** method by **implementing** the **Flyweight** layer.
+
+```kotlin
+class IconFlyweight(private val icon: ImageVector) : Flyweight {
+    
+  @Composable
+  override fun render(color: Color, size: Dp) {
+    Icon(imageVector = icon, tint = color, modifier = Modifier.size(size))
+  }
+}
+```
+
+It's time to create **Flyweight** objects in the **Flyweight Factory** layer. Here, if there is a previously created object, **icons** are pulled from the map. If it is an object that comes for the first time, it is added to the map.
+
+```kotlin
+object IconFactory {
+    private val icons = mutableMapOf<ImageVector, IconFlyweight>()
+
+    fun getIcon(icon: ImageVector): IconFlyweight {
+        return icons.getOrPut(icon) { IconFlyweight(icon) }
+    }
+}
+```
+
+So how can we use this on the UI (**Client**) side?
+
+```kotlin
+@Composable
+fun PostList(posts: List<String>) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        posts.forEach { post ->
+            PostItem(postContent = post)
+        }
+    }
+}
+
+@Composable
+fun PostItem(postContent: String) {
+  val likeIcon = IconFactory.getIcon(Icons.Default.Favorite)
+  val shareIcon = IconFactory.getIcon(Icons.Default.Share)
+
+  Column(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(vertical = 8.dp)
+  ) {
+    Text(text = postContent, style = MaterialTheme.typography.bodyMedium)
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+      likeIcon.render(color = Color.Red, size = 24.dp)
+      shareIcon.render(color = Color.Blue, size = 24.dp)
+    }
+  }
+}
+```
+
+[Return to the beginning of the documentation](#head)
+
+- <h2 align="left"><a id="proxy">Proxy (Structural Patterns)</h2>
+A proxy design pattern is a structural design pattern used to control access to an object or to make this access through another object. While this pattern is used to extend or modify the functionality of an object, it operates without changing the structure of the original object. The proxy serves as a kind of interface or representative to the real object.
+
+<h4 align="left">The proxy design pattern has three main components</h4>
+
+- **Subject Interface:** The actual object and the interface that the proxy should implement.
+- **Real Subject:** The actual object that the client wants to access.
+- **Proxy:** An object that controls access to or replaces the real object.
+
+<h5 align="left">Advantages of proxy design pattern</h5>
+
+- Proxy allows you to control access to real objects. For example, you can add security controls or access permissions.
+- Can improve the performance of the application by delaying the loading of expensive resources. It is especially useful for large objects or data coming over the network.
+- It can increase performance by reducing unnecessary network traffic, especially when retrieving data from remote servers. For example, by caching data, it can prevent the same data from being loaded repeatedly.
+- The proxy can log operations performed on the real object and add extra layers of security.
+- Users or other objects can interact with real objects without being aware of the existence of the proxy.
+
+<h5 align="left"> Disadvantages of proxy design pattern</h5>
+
+- Implementation of proxy pattern can increase the overall complexity of the system. For simple cases, this extra complexity may be unnecessary.
+- Proxy class may create extra processing load in some cases. In particular, going through a proxy on every request can increase processing time.
+- Proper management of the proxy is necessary, especially if features such as caching or security have been added. A mismanaged proxy can lead to data inconsistency or security vulnerabilities.
+- Implementing the proxy pattern correctly can make the design difficult to understand and extend in some cases.
+- The layers added by the proxy can make testing processes more complex in some cases.
+
+**Sample Scenario**
+
+How about doing this in an actual application, package, etc. How can we implement it? Let's look at it. As a real-life scenario in Flutter, a proxy can be used to access a remote API. For example, when an application is pulling data from a remote server, it can use a proxy to manage these requests and add a caching mechanism if necessary. Let's assume we are using a **Weather** API in this scenario.
+
+First of all, we create an **interface** named **WeatherService** as **Subject Interface**. This interface has a method called **getWeatherData** to retrieve data from the API. We will implement this layer to the original object and the proxy layer.
+
+```kotlin
+interface WeatherService {
+  suspend fun getWeatherData(): String
+}
+```
+
+Then, we implement the **Subject Interface** while writing a **Real Subject** layer named **WeatherApiService**.
+
+```kotlin
+class WeatherApiService : WeatherService {
+  override suspend fun getWeatherData(): String {
+    return "Sunny, 25°C"
+  }
+}
+```
+
+Now it's time for the **Proxy** layer, which is the key point of the **Proxy Design Pattern**. The proxy layer captures API requests and, if necessary, adds a cache mechanism or logs the requests.
+
+```kotlin
+class WeatherServiceProxy(private val apiService: WeatherApiService = WeatherApiService()) : WeatherService {
+  private var cachedData: String? = null
+
+  override suspend fun getWeatherData(): String {
+    return if (cachedData == null) {
+      println("Fetching data from API...")
+      cachedData = apiService.getWeatherData()
+      cachedData!!
+    } else {
+      println("Returning cached data...")
+      cachedData!!
+    }
+  }
+}
+```
+
+So how can we use this? In this example, the WeatherServiceProxy class controls the data retrieval from the API and caches the data. In the first request, it accesses the real API and retrieves the data, and in subsequent requests it uses the cached data. This approach can improve performance and reduce network traffic, especially in situations where the same data is needed frequently. The proxy design pattern provides an efficient solution in such scenarios. In our case, we will assign the data pulled 5 times to the cache after it is pulled for the first time, and we will quickly obtain the answers to the remaining 4 requests from the cache. In this way, we will not be loaded with unnecessary network traffic.
+
+```kotlin
+@Composable
+fun ProxyView() {
+  val weatherService: WeatherService = WeatherServiceProxy()
+
+  val weatherData = remember { mutableStateOf("Loading...") }
+
+  LaunchedEffect(Unit) {
+    weatherData.value = getWeatherFiveTimes(weatherService)
+  }
+
+  Scaffold(
+    topBar = {
+      TopAppBar(title = { Text("Weather App") })
+    }
+  ) { padding ->
+    Box(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding),
+      contentAlignment = Alignment.Center
+    ) {
+      Text(text = weatherData.value, style = MaterialTheme.typography.body1)
+    }
+  }
+}
+
+suspend fun getWeatherFiveTimes(service: WeatherService): String {
+  val results = mutableListOf<String>()
+  repeat(5) {
+    val data = service.getWeatherData()
+    results.add(data)
+  }
+  return results.joinToString("\n")
+}
+```
+
+[Return to the beginning of the documentation](#head)
+
 # Design Patterns TODO List
 
 ## Creational Patterns
@@ -1226,8 +1424,8 @@ fun FacadeView() {
 - [X] Composite
 - [X] Decorator
 - [X] Facade
-- [ ] Flyweight
-- [ ] Proxy
+- [X] Flyweight
+- [X] Proxy
 
 ## Behavioral Patterns
 - [ ] Chain of Responsibility

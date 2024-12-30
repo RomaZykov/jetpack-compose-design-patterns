@@ -11,7 +11,9 @@ import com.cavin.designpatterns.views.BridgeView
 import com.cavin.designpatterns.views.CompositeView
 import com.cavin.designpatterns.views.DecoratorPatternExample
 import com.cavin.designpatterns.views.FacadeView
+import com.cavin.designpatterns.views.FlyWeightView
 import com.cavin.designpatterns.views.ProtoTypeView
+import com.cavin.designpatterns.views.ProxyView
 import com.cavin.designpatterns.views.SingletonView
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetpackComposeDesignPatternsTheme {
-                FacadeView()
+                ProxyView()
             }
         }
     }
