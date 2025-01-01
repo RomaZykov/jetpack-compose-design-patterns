@@ -1408,6 +1408,144 @@ suspend fun getWeatherFiveTimes(service: WeatherService): String {
 
 [Return to the beginning of the documentation](#head)
 
+
+- <h2 align="left"><a id="chainofresponsibility">Chain of Responsibility (Behavioral Patterns)</h2>
+Let's discuss the Chain of Responsibility design pattern in Flutter in more detail. This pattern is useful for managing incoming requests or commands across different widgets or screens, especially in large and modular Flutter applications.
+
+<h4 align="left">The Chain of Responsibility design pattern has three main components</h4>
+
+- **Handler:** An interface that defines how to process the request and pass the request to the next handler in the chain.
+- **Concrete Handlers:** Classes that implement the Handler interface. Each processor decides whether to process the request or pass it to the next processor in the chain.
+- **Client:** The person or system that initiates the request and sends it to the first handler of the chain.
+
+<h5 align="left">Working Mechanism</h5>
+
+- The client sends the request to the first handler in the chain.
+- Each processor checks the request and decides whether to process it or not.
+- If a handler can process the request, it performs the action and the process ends.
+- If the handler cannot process the request, it forwards it to the next handler in the chain.
+- This process continues until a handler processes the request or the chain ends.
+
+<h5 align="left">Advantages of the Chain of Responsibility design pattern</h5>
+
+- Sender and receiver become independent, encouraging loose coupling in the system.
+- Easy to add new handlers or change the order of existing ones.
+- Each handler has a single responsibility, making the code easier to maintain.
+
+<h5 align="left"> Disadvantages of proxy design pattern</h5>
+
+- The request may pass through multiple processors, which may impact performance.
+- Can be difficult to debug because the request passes through various handlers.
+
+**Sample Scenario**
+
+How about doing this in an actual application, package, etc. How can we implement it? Let's look at it. Consider a Flutter application that processes different types of user input (gestures, button clicks, text input). The application can use the Chain of Responsibility model to process these inputs.
+
+The **Handler** interface, which forms the basis of the Chain of Responsibility pattern, defines the basic methods that each **Concrete Handlers** class must implement. In Flutter, this is usually done in the form of an abstract class. In our case, **InteractionHandler** will be our **Handler** **abstarct** class. This abstract class will be inherited by **Concrete Handlers**'s. **setNextHandler** will be a method to establish connections between chains. In this way, when an incompatible situation occurs, the next chain will run.
+
+```kotlin
+abstract class InteractionHandler {
+  private var nextHandler: InteractionHandler? = null
+
+  fun setNextHandler(handler: InteractionHandler) {
+    nextHandler = handler
+  }
+
+  fun handleInteraction(interactionType: String, context: Context) {
+    if (!processInteraction(interactionType, context)) {
+      nextHandler?.handleInteraction(interactionType, context)
+        ?: handleUnrecognizedInteraction(interactionType, context)
+    }
+  }
+
+  protected abstract fun processInteraction(interactionType: String, context: Context): Boolean
+
+  private fun handleUnrecognizedInteraction(interactionType: String, context: Context) {
+    AlertDialog.Builder(context)
+      .setTitle("Unrecognized Interaction")
+      .setMessage("Interaction type '$interactionType' is not supported.")
+      .setPositiveButton("OK", null)
+      .show()
+  }
+}
+```
+
+Then we define our **Concrete Handlers** classes. In our case, we are writing 2 different **Concrete Handlers** classes, **ButtonInteractionHandler** and **FormInteractionHandler**, as an example. If **ButtonInteractionHandler** from these classes is used, we want to display an **AlertBox** on the screen as per the scenario. If the **FormInteractionHandler** class is used, we want to print the _Form submitted_ log by submitting. If **interactionType** is not found, we provide relevant information by running the **handleUnrecognizedInteraction** method.
+
+```kotlin
+class ButtonInteractionHandler : InteractionHandler() {
+  override fun processInteraction(interactionType: String, context: Context): Boolean {
+    return if (interactionType == "buttonClick") {
+      AlertDialog(
+        onDismissRequest = {},
+        title = { Text("Button Clicked") },
+        text = { Text("Button interaction handled.") },
+        confirmButton = {
+          Button(onClick = { /* Dismiss Dialog */}) {
+            Text("OK")
+          }
+        }
+      )
+      true
+    } else {
+      false
+    }
+  }
+}
+
+class FormInteractionHandler : InteractionHandler() {
+  override fun processInteraction(interactionType: String, context: Context): Boolean {
+    return if (interactionType == "formSubmit") {
+      Log.d("FormInteractionHandler", "Form submitted.")
+      true
+    } else {
+      false
+    }
+  }
+}
+```
+
+So, in what scenario can we use this on the UI side? Let's assume we have 3 buttons: **Click Me**, **Submit Form** and **Unknown**. First of all, we create a **ButtonInteractionHandler** and set its **interactionType** to **buttonClick**. The purpose of this button is to display an **AlertDialog** if **buttonClick** exists. If **interactionType** is not technically supported in the current handler, the next handler will be processed. If **interactionType** is not supported at all, we notify the user with **handleUnrecognizedInteraction**.
+
+```kotlin
+class ChainOfResponsibilityActivity : ComponentActivity() {
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    val buttonHandler = ButtonInteractionHandler()
+    val formHandler = FormInteractionHandler()
+    buttonHandler.setNextHandler(formHandler)
+
+    setContent {
+      ChainOfResponsibilityScreen(buttonHandler)
+    }
+  }
+}
+
+@Composable
+fun ChainOfResponsibilityScreen(buttonHandler: InteractionHandler) {
+  val context = LocalContext.current
+
+  Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Button(onClick = { buttonHandler.handleInteraction("buttonClick", context) }) {
+      Text("Click Me")
+    }
+    Button(onClick = { buttonHandler.handleInteraction("formSubmit", context) }) {
+      Text("Submit Form")
+    }
+    Button(onClick = { buttonHandler.handleInteraction("unknown", context) }) {
+      Text("Unknown")
+    }
+  }
+}
+```
+
+[Return to the beginning of the documentation](#head)
+
 # Design Patterns TODO List
 
 ## Creational Patterns
