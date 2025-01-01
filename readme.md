@@ -1748,6 +1748,157 @@ fun ChainOfResponsibilityView() {
 
 [Return to the beginning of the documentation](#head)
 
+
+- <h2 align="left"><a id="interpreter">Interpreter (Behavioral Patterns)</h2>
+The Interpreter design pattern is a behavioral design pattern that allows us to define a grammar for a language and provide an interpreter that processes expressions in that language.
+
+<h4 align="left">The Interpreter design pattern has 4 main components</h4>
+
+- **Expression Interface:** This interface declares a method of interpreting a particular context. It is the core of the interpreter pattern.
+- **Concrete Expression Classes:** These classes implement the Expression interface and interpret specific rules in the language.
+- **Context Class(optional):** This class contains general information about the interpreter.
+- **Client:** The client creates the syntax tree representing a particular sentence that defines the grammar of the language. The tree consists of instances of Concrete Expression classes.
+
+<h5 align="left">Advantages of the Interpreter design pattern</h5>
+
+- Grammar rules and interpreters can be easily changed and new expressions added as needed.
+- It ensures that the code is modular and reusable.
+- Can be optimized for processing complex expressions.
+
+<h5 align="left"> Disadvantages of the Interpreter design pattern</h5>
+
+- Developing interpreters for complex languages can be difficult.
+- For simple expressions the interpreter may be slower than direct code.
+
+**Sample Scenario**
+
+Under normal circumstances, **Interpreter Design Pattern** is used more in _programming languages_, _SQL queries_, _Mathematical expressions_, _Game engines_, but since our current focus is **Flutter**, **Interpreter Design Pattern** is based on **Flutter Framework**. We will try to use it. For our scenario, let's consider a mobile application that allows users to define customizable widget structures using a text-based language. Users can dynamically build their interfaces using a simple language that specifies specific widget types, features, and layouts. For example, a user may want to show text by typing something like `"Text: Deatsilence"` or they might want to show an image by typing `"Image: https://picsum.photos/200"`.
+
+First, we define an **Expression Interface** named **WidgetExpression**. We write a method signature called _interpret()_ in **WidgetExpression** that returns a Widget. This interface will be implemented by **Concrete Expression** classes.
+
+```kotlin
+sealed interface UIComponent {
+  @Composable
+  fun interpret()
+}
+```
+
+Afterwards, we create two **Concrete Expression Class** named **ConcreteExpressionText** and **ConcreteExpressionImage** and implement the abstract class named **WidgetExpression**. We _override_ the _interpret_ method in the **Concrete Expression** classes and return **Text or Image** according to the text script received from the user. We can do this for other Widgets as well, but according to our scenario, we continue with these two specifically.
+
+```kotlin
+class ConcreteExpressionText(private val text: String) : UIComponent {
+  @Composable
+  override fun interpret() {
+    Text(text = text, style = TextStyle(fontSize = 20.sp))
+  }
+}
+
+
+class ConcreteExpressionImage(private val url: String) : UIComponent {
+  @Composable
+  override fun interpret() {
+    AsyncImage(
+      model = url,
+      contentDescription = null,
+      modifier = Modifier.size(100.dp)
+    )
+  }
+}
+```
+
+Then, we add a method called **parseScript()** into the **WidgetParser** class to interpret the scripts coming from the user.
+
+```kotlin
+class WidgetParser {
+  fun parseScript(script: String): List<UIComponent> {
+    val expressions = mutableListOf<UIComponent>()
+    script.lines().forEach { line ->
+      val trimmedLine = line.trim()
+      when {
+        trimmedLine.startsWith("Text:") -> {
+          val text = trimmedLine.substringAfter("Text:").trim()
+          expressions.add(ConcreteExpressionText(text))
+        }
+        trimmedLine.startsWith("Image:") -> {
+          val url = trimmedLine.substringAfter("Image:").trim()
+          if (url.startsWith("https://")) {
+            expressions.add(ConcreteExpressionImage(url))
+          }
+        }
+      }
+    }
+    return expressions
+  }
+}
+```
+
+Finally, how can we use them on the UI side? Let's look at it. For example, let's interpret some scripts from the user via a **TextField**. Let's show the image or text to the user as a result of the interpretation.
+
+```kotlin
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InterpreterScreen() {
+  var script by remember { mutableStateOf("") }
+  val parser = WidgetParser()
+  var expressions by remember { mutableStateOf(parser.parseScript(script)) }
+
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = { Text("Interpreter Pattern") }
+      )
+    },
+    content = { paddingValues ->
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .padding(paddingValues)
+          .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+      ) {
+        BasicTextField(
+          value = script,
+          onValueChange = {
+            script = it
+          },
+          modifier = Modifier.fillMaxWidth(),
+          decorationBox = { innerTextField ->
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
+            ) {
+              if (script.isEmpty()) {
+                Text(
+                  text = "Command Script",
+                  color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+              }
+              innerTextField()
+            }
+          }
+        )
+        Button(onClick = { expressions = parser.parseScript(script) }) {
+          Text("Interpret the Script")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        expressions.forEach { expression ->
+          expression.interpret()
+          Spacer(modifier = Modifier.height(8.dp))
+        }
+      }
+    }
+  )
+}
+```
+
+- When the user sees any text following the **Text:** keyword to display text, the relevant text will be displayed on the screen.
+
+- To display an image, the user must provide a url followed by the **Image:** keyword. It will display the image found in the URL on the screen.
+
+[Return to the beginning of the documentation](#head)
+
 # Design Patterns TODO List
 
 ## Creational Patterns
@@ -1772,7 +1923,7 @@ fun ChainOfResponsibilityView() {
 
 - [X] Chain of Responsibility
 - [ ] Iterator
-- [ ] Interpreter
+- [X] Interpreter
 - [ ] Observer
 - [ ] Command
 - [ ] Mediator
