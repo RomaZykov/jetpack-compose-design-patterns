@@ -1883,6 +1883,167 @@ fun InterpreterView() {
 
 [Return to the beginning of the documentation](#head)
 
+
+- <h2 align="left"><a id="command">Command (Behavioral Patterns)</h2>
+Command pattern is a pattern frequently used in software engineering, especially object-oriented programming. This pattern allows encapsulating a request or action as an object. The main purpose of this approach is to create an abstraction layer between the code that performs operations and the code that calls these operations.
+
+## The Command design pattern has two main components
+
+- **Command Interface:** Create an interface that all commands will implement. It usually contains a single `execute()` method.
+- **Concrete Command:** Create classes that implement the command interface and perform a specific operation.
+- **Invoker:** Triggers commands. For example, a button can take on this role.
+- **Receiver:** The object on which the command actually does the work. For example, a class that performs a specific operation within an application.
+- **Client:** Creates the command object and assigns it to the caller.
+
+### Advantages of the Command design pattern
+
+- Commands can be reused in different contexts.
+- Provides a clear separation between UI and business logic.
+- New commands can be added easily.
+- It makes writing unit tests easier because each command contains separate functionality that can be tested independently.
+
+### Disadvantages of the Command design pattern
+
+- It may be too complex for simple operations.
+- Extra classes may be required for each new command, which can bloat the code base.
+
+---
+
+## Sample Scenario
+Let's create a simple text editor in an Android application using Jetpack Compose. As the user edits text, each editing action will be recorded as a command, providing undo and redo functions.
+
+### Command Interface
+First, we start by writing the **Command Interface** component named `TextCommand`.
+
+```kotlin
+/**
+ * [TextCommand] is the abstract class for the Command Pattern.
+ */
+interface TextCommand {
+    fun execute()
+    fun undo()
+}
+```
+
+### Concrete Command
+Next, we write the **Concrete Command** component named `UpdateTextCommand`. The `TextCommand` interface is implemented in this component. This class will be used to keep track of new and old text statuses.
+
+```kotlin
+/**
+ * [UpdateTextCommand] is the concrete class for the Command Pattern.
+ */
+class UpdateTextCommand(
+    private val textState: MutableState<String>,
+    private val newText: String
+) : TextCommand {
+
+    private val oldText: String = textState.value
+
+    override fun execute() {
+        textState.value = newText
+    }
+
+    override fun undo() {
+        textState.value = oldText
+    }
+}
+```
+
+### Invoker
+Now, we create the **Invoker** component named `TextEditorController`. This class will manage the transaction history using methods such as `undo()` and `redo()`.
+
+```kotlin
+class TextEditorController {
+    private val commandHistory = mutableListOf<TextCommand>()
+    private var currentCommandIndex = -1
+
+    fun executeCommand(command: TextCommand) {
+        if (currentCommandIndex != commandHistory.size - 1) {
+            commandHistory.subList(currentCommandIndex + 1, commandHistory.size).clear()
+        }
+        commandHistory.add(command)
+        currentCommandIndex++
+        command.execute()
+    }
+
+    fun undo() {
+        if (currentCommandIndex >= 0) {
+            commandHistory[currentCommandIndex].undo()
+            currentCommandIndex--
+        }
+    }
+
+    fun redo() {
+        if (currentCommandIndex < commandHistory.size - 1) {
+            currentCommandIndex++
+            commandHistory[currentCommandIndex].execute()
+        }
+    }
+}
+```
+
+### UI Integration with Jetpack Compose
+Finally, we create the UI using Jetpack Compose. A `TextField` will be used for text input, with **Undo** and **Redo** buttons.
+
+```kotlin
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommandPatternView() {
+  val textFieldState = remember { mutableStateOf(TextFieldValue(text = "")) }
+  val textEditorController = remember { TextEditorController() }
+
+  Scaffold(
+    topBar = {
+      TopAppBar(title = { Text("Command Pattern in Jetpack Compose") })
+    }
+  ) { padding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)
+        .padding(16.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      TextField(
+        value = textFieldState.value,
+        onValueChange = { newValue ->
+          textEditorController.executeCommand(
+            UpdateTextCommand(
+              controller = textFieldState.value,
+              onTextChanged = { updatedValue -> textFieldState.value = updatedValue },
+              newText = newValue.text
+            )
+          )
+        },
+        modifier = Modifier.fillMaxWidth()
+      )
+
+      Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth()
+      ) {
+        Button(
+          onClick = { textEditorController.undo() },
+          modifier = Modifier.weight(1f)
+        ) {
+          Text("Undo")
+        }
+
+        Button(
+          onClick = { textEditorController.redo() },
+          modifier = Modifier.weight(1f)
+        ) {
+          Text("Redo")
+        }
+      }
+    }
+  }
+}
+```
+
+[Return to the beginning of the documentation](#head)
+
+
 # Design Patterns TODO List
 
 ## Creational Patterns
@@ -1906,10 +2067,10 @@ fun InterpreterView() {
 ## Behavioral Patterns
 
 - [X] Chain of Responsibility
-- [ ] Iterator
 - [X] Interpreter
+- [X] Command
+- [ ] Iterator
 - [ ] Observer
-- [ ] Command
 - [ ] Mediator
 - [ ] State
 - [ ] Strategy

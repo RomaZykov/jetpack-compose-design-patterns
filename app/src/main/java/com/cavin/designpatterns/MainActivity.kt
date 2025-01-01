@@ -9,6 +9,7 @@ import com.cavin.designpatterns.views.AbstractFactoryView
 import com.cavin.designpatterns.views.AdaptorView
 import com.cavin.designpatterns.views.BridgeView
 import com.cavin.designpatterns.views.ChainOfResponsibilityView
+import com.cavin.designpatterns.views.CommandPatternView
 import com.cavin.designpatterns.views.CompositeView
 import com.cavin.designpatterns.views.DecoratorPatternExample
 import com.cavin.designpatterns.views.FacadeView
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetpackComposeDesignPatternsTheme {
-                InterpreterView()
+                CommandPatternView()
             }
         }
     }
