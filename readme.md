@@ -1837,9 +1837,9 @@ Finally, how can we use them on the UI side? Let's look at it. For example, let'
 ```kotlin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InterpreterScreen() {
+fun InterpreterView() {
   var script by remember { mutableStateOf("") }
-  val parser = WidgetParser()
+  val parser = remember { WidgetParser() }
   var expressions by remember { mutableStateOf(parser.parseScript(script)) }
 
   Scaffold(
@@ -1856,28 +1856,12 @@ fun InterpreterScreen() {
           .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
       ) {
-        BasicTextField(
+        TextField(
           value = script,
           onValueChange = {
             script = it
           },
           modifier = Modifier.fillMaxWidth(),
-          decorationBox = { innerTextField ->
-            Box(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
-            ) {
-              if (script.isEmpty()) {
-                Text(
-                  text = "Command Script",
-                  color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-              }
-              innerTextField()
-            }
-          }
         )
         Button(onClick = { expressions = parser.parseScript(script) }) {
           Text("Interpret the Script")
