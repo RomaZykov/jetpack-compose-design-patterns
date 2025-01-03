@@ -2066,7 +2066,7 @@ fun CommandPatternView() {
 
 ## Behavioral Patterns
 
-- [X] Chain of Responsibilit
+- [X] Chain of Responsibility
 - [X] Interpreter
 - [X] Command
 - [ ] Iterator
