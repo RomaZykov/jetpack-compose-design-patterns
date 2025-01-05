@@ -1339,8 +1339,8 @@ fun FacadeView() {
   pattern aims to reduce repetitive states by separating intrinsic states and non-shareable states (
   extrinsic states) between objects, thus efficiently reducing memory usage. It becomes especially
   important in cases where many similar objects are created. An example of using the Flyweight
-  design pattern in Flutter would be optimizing repeating widgets, especially in widget trees. In
-  Flutter applications, some widgets are used repeatedly, especially in list or grid views. In this
+  design pattern in Jetpack Compose would be optimizing repeating widgets, especially in widget trees. In
+  Jetpack Compose applications, some widgets are used repeatedly, especially in list or grid views. In this
   case, by applying the Flyweight pattern, we can optimize memory usage and improve the performance
   of the application.
 
@@ -1483,7 +1483,7 @@ fun PostItem(postContent: String) {
 **Sample Scenario**
 
 How about doing this in an actual application, package, etc. How can we implement it? Let's look at
-it. As a real-life scenario in Flutter, a proxy can be used to access a remote API. For example,
+it. As a real-life scenario in Jetpack Compose, a proxy can be used to access a remote API. For example,
 when an application is pulling data from a remote server, it can use a proxy to manage these
 requests and add a caching mechanism if necessary. Let's assume we are using a **Weather** API in
 this scenario.
@@ -1579,9 +1579,9 @@ suspend fun getWeatherFiveTimes(service: WeatherService): String {
 [Return to the beginning of the documentation](#head)
 
 - <h2 align="left"><a id="chainofresponsibility">Chain of Responsibility (Behavioral Patterns)</h2>
-  Let's discuss the Chain of Responsibility design pattern in Flutter in more detail. This pattern
+  Let's discuss the Chain of Responsibility design pattern in Jetpack Compose in more detail. This pattern
   is useful for managing incoming requests or commands across different widgets or screens,
-  especially in large and modular Flutter applications.
+  especially in large and modular Jetpack Compose applications.
 
 <h4 align="left">The Chain of Responsibility design pattern has three main components</h4>
 
@@ -1614,12 +1614,12 @@ suspend fun getWeatherFiveTimes(service: WeatherService): String {
 **Sample Scenario**
 
 How about doing this in an actual application, package, etc. How can we implement it? Let's look at
-it. Consider a Flutter application that processes different types of user input (gestures, button
+it. Consider a Jetpack Compose application that processes different types of user input (gestures, button
 clicks, text input). The application can use the Chain of Responsibility model to process these
 inputs.
 
 The **Handler** interface, which forms the basis of the Chain of Responsibility pattern, defines the
-basic methods that each **Concrete Handlers** class must implement. In Flutter, this is usually done
+basic methods that each **Concrete Handlers** class must implement. In Jetpack Compose, this is usually done
 in the form of an abstract class. In our case, **InteractionHandler** will be our **Handler** *
 *abstarct** class. This abstract class will be inherited by **Concrete Handlers**'s. *
 *setNextHandler** will be a method to establish connections between chains. In this way, when an
@@ -1772,7 +1772,7 @@ The Interpreter design pattern is a behavioral design pattern that allows us to 
 
 **Sample Scenario**
 
-Under normal circumstances, **Interpreter Design Pattern** is used more in _programming languages_, _SQL queries_, _Mathematical expressions_, _Game engines_, but since our current focus is **Flutter**, **Interpreter Design Pattern** is based on **Flutter Framework**. We will try to use it. For our scenario, let's consider a mobile application that allows users to define customizable widget structures using a text-based language. Users can dynamically build their interfaces using a simple language that specifies specific widget types, features, and layouts. For example, a user may want to show text by typing something like `"Text: Deatsilence"` or they might want to show an image by typing `"Image: https://picsum.photos/200"`.
+Under normal circumstances, **Interpreter Design Pattern** is used more in _programming languages_, _SQL queries_, _Mathematical expressions_, _Game engines_, but since our current focus is **Jetpack Compose**, **Interpreter Design Pattern** is based on **Jetpack Compose Framework**. We will try to use it. For our scenario, let's consider a mobile application that allows users to define customizable widget structures using a text-based language. Users can dynamically build their interfaces using a simple language that specifies specific widget types, features, and layouts. For example, a user may want to show text by typing something like `"Text: Deatsilence"` or they might want to show an image by typing `"Image: https://picsum.photos/200"`.
 
 First, we define an **Expression Interface** named **WidgetExpression**. We write a method signature called _interpret()_ in **WidgetExpression** that returns a Widget. This interface will be implemented by **Concrete Expression** classes.
 
@@ -2042,7 +2042,6 @@ fun CommandPatternView() {
 ```
 
 [Return to the beginning of the documentation](#head)
-
 
 # Design Patterns TODO List
 
