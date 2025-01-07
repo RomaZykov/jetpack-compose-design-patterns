@@ -16,8 +16,6 @@ Project maintained by [@Cavin](https://www.github.com/cavin-macwan/)
     - [Singleton](#singleton)
     - [Prototype](#prototype)
 
-More to come soon ⏳ (Create a PR if you wish to contribute 😄)
-
 - Structural Patterns
 
     - [Adapter](#adapter)
@@ -2076,6 +2074,8 @@ fun CommandPatternView() {
 - [ ] Template Method
 - [ ] Visitor
 - [ ] Memento
+
+More to come soon ⏳ (Create a PR if you wish to contribute 😄)
 
 ![Hey\! Thanks\!](https://media.giphy.com/media/ip6n2oVNZBHiM/giphy.gif)
 
