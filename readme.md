@@ -1339,8 +1339,8 @@ fun FacadeView() {
   pattern aims to reduce repetitive states by separating intrinsic states and non-shareable states (
   extrinsic states) between objects, thus efficiently reducing memory usage. It becomes especially
   important in cases where many similar objects are created. An example of using the Flyweight
-  design pattern in Jetpack Compose would be optimizing repeating widgets, especially in widget trees. In
-  Jetpack Compose applications, some widgets are used repeatedly, especially in list or grid views. In this
+  design pattern in Jetpack Compose would be optimizing repeating composables, especially in widget trees. In
+  Jetpack Compose applications, some composables are used repeatedly, especially in list or grid views. In this
   case, by applying the Flyweight pattern, we can optimize memory usage and improve the performance
   of the application.
 
@@ -1580,7 +1580,7 @@ suspend fun getWeatherFiveTimes(service: WeatherService): String {
 
 - <h2 align="left"><a id="chainofresponsibility">Chain of Responsibility (Behavioral Patterns)</h2>
   Let's discuss the Chain of Responsibility design pattern in Jetpack Compose in more detail. This pattern
-  is useful for managing incoming requests or commands across different widgets or screens,
+  is useful for managing incoming requests or commands across different composables or screens,
   especially in large and modular Jetpack Compose applications.
 
 <h4 align="left">The Chain of Responsibility design pattern has three main components</h4>
@@ -1783,7 +1783,7 @@ sealed interface UIComponent {
 }
 ```
 
-Afterwards, we create two **Concrete Expression Class** named **ConcreteExpressionText** and **ConcreteExpressionImage** and implement the abstract class named **WidgetExpression**. We _override_ the _interpret_ method in the **Concrete Expression** classes and return **Text or Image** according to the text script received from the user. We can do this for other Widgets as well, but according to our scenario, we continue with these two specifically.
+Afterwards, we create two **Concrete Expression Class** named **ConcreteExpressionText** and **ConcreteExpressionImage** and implement the abstract class named **WidgetExpression**. We _override_ the _interpret_ method in the **Concrete Expression** classes and return **Text or Image** according to the text script received from the user. We can do this for other composables as well, but according to our scenario, we continue with these two specifically.
 
 ```kotlin
 class ConcreteExpressionText(private val text: String) : UIComponent {
