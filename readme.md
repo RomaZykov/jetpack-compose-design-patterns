@@ -8,6 +8,9 @@ Project maintained by [@Cavin](https://www.github.com/cavin-macwan/)
   Design patterns are important tools widely used in software development. These patterns can
   improve code quality, consistency and reusability by controlling the creation, assembly and
   communication of objects.
+  
+> [!NOTE]  
+> This site outlines how to apply these design patterns to the creation and population of composables in a Jetpack Compose or Compose Multiplatform project.
 
 - Creational Patterns
 
