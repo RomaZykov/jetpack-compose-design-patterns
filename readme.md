@@ -62,7 +62,7 @@ factory class determines which object is created.
 - It makes your code more readable and understandable by abstracting the object creation process.
 - It makes the software development process more efficient.
 
-<h5 align="left"> Disadvantages of the factory design pattern:</h5>
+<h5 align="left"> Disadvantages of the singleton design pattern:</h5>
 
 - It may be difficult to use in complex applications.
 - It may cause you to write more code.
